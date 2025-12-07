@@ -1,0 +1,187 @@
+
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نور القلب</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+    * { 
+        box-sizing: border-box; 
+        font-family: Arial;
+          margin:0;
+          padding:0;
+         }
+    body, html { 
+        height:100%;
+         width:100%;
+          background-color:#d0e0a0c2; 
+        }
+
+    .hero {
+        background-image: url();
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding:20px;
+        color: #1f3d2b;
+        position: relative;
+    }
+
+    .overlay {
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background: rgba(255,255,255,0.4);
+        z-index:1;
+    }
+
+    .content {
+        position: relative;
+        z-index:2;
+        max-width:600px;
+    }
+
+    h1 { font-size:48px;
+         font-weight:700;
+          margin-bottom:15px; 
+        
+          color:#155833;
+          text-align: center;
+          
+         }
+    p.subtitle { font-size:22px; margin-bottom:40px; }
+
+    .question-box {
+        background-color:#cad19cdd;
+        padding:20px;
+        border-radius:15px;
+        box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .question-box p { font-size:20px; margin-bottom:15px; font-weight:bold; color:#1f3d2b; }
+
+    .options { display:flex; flex-direction: column; gap:10px; }
+
+    .options button {
+        padding:12px 20px;
+        border:none;
+        border-radius:10px;
+        background-color:#366b2d;
+        color:rgb(243, 243, 184);
+        font-size:18px;
+        cursor:pointer;
+        transition:0.3s;
+    }
+
+    .options button:hover { background-color:#5d9c3e; }
+
+    .result {
+        margin-top:20px;
+        font-size:20px;
+        color:#1f3d2b;
+        font-weight:bold;
+        min-height:50px;
+    }
+    
+    
+    
+.start-btn {
+    margin-top:10px;
+    padding:14px 25px;
+    background:#145a18;
+    color:#d5dead;
+    font-size:20px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    transition:0.3s;
+    font-weight:bold;
+}
+
+.start-btn:hover {
+    background:#5d9c3e;
+}
+
+</style>
+</head>
+
+<body>
+
+
+
+<div class="hero">
+    <div class="overlay"></div>
+    <div class="content">
+    
+        <h1>نورُ القَلبِ</h1>
+    
+        <p class="subtitle">🌿"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ"🌿</p>
+        
+        
+        <div class="question-box">
+            <p>كيف حالك اليوم؟</p>
+            <div class="options">
+                <button onclick="showMessage(' الحمد لله الذي بنعمته تتم الصالحات🦋 ')">😄 سعيد</button>
+                <button onclick="showMessage(' لا تقلق، كل يوم فرصة جديدة للتقرب لله 🌸')">😢 حزين</button>
+                <button onclick="showMessage(' خذ نفس عميق، الصبر مفتاح الفرج 🌿')">😰 متوتر</button>
+                <button onclick="showMessage(' ثق بالله، الأمور ستتحسن قريباً 🌸')">😟 قلق</button>
+                <button onclick="showMessage(' هدئ قلبك وادعُ الله، فهو معك 🌿')">😡 غضبان</button>
+            </div>
+            <div class="result" id="result"></div>
+        </div>
+
+   <div class="start-box">
+    
+    <button class="start-btn" onclick="location.href='page2.html'">
+         ابدأ رحلـتـك ✨
+    </button>
+
+</div>
+        
+
+
+</div>
+
+
+
+<script>
+    function showMessage(message) {
+        document.getElementById('result').innerText = message;
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
