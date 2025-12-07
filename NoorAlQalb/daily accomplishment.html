@@ -1,0 +1,276 @@
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإنجاز اليومي</title>
+<style>
+body {
+    font-family: 'Tajawal', sans-serif;
+    background: #d7e6aac2;
+    text-align: center;
+    padding: 20px;
+    color: #234d2c;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 26px;
+}
+
+
+table {
+    margin: auto;
+    border-collapse: collapse;
+    width: 95%;
+    max-width: 700px;
+}
+
+th, td {
+    border: 1px solid #234d2c33;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+th {
+    background: #a3b169;
+    color: white;
+}
+
+td {
+    background: #d0e0a0c2;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+td.checked {
+    background: #85c085;
+    color: white;
+}
+
+
+#heartPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 280px;
+    height: 280px;
+    z-index: 999;
+    transition: transform 0.5s ease;
+}
+
+#heartShape {
+    width: 150px;
+    height: 150px;
+    background-color: #ff6b81;
+    position: absolute;
+    top: 65px;
+    left: 65px;
+    transform: rotate(-45deg);
+}
+
+#heartShape::before,
+#heartShape::after {
+    content: "";
+    width: 150px;
+    height: 150px;
+    background-color: #ff6b81;
+    border-radius: 50%;
+    position: absolute;
+}
+
+#heartShape::before {
+    top: -75px;
+    left: 0;
+}
+
+#heartShape::after {
+    left: 75px;
+    top: 0;
+}
+
+.heart-text {
+    position: absolute;
+    width: 180px;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+</style>
+</head>
+<body>
+
+<h1>التزام اليوم يصنع نجاح الأسبوع🌿</h1>
+
+<table>
+    <tr>
+        <th>الصلاة / الذكر</th>
+        <th>السبت</th>
+         <th>الأحد</th>
+        <th>الإثنين</th>
+        <th>الثلاثاء</th>
+        <th>الأربعاء</th>
+        <th>الخميس</th>
+        <th>الجمعة</th>
+        
+    </tr>
+    <tr><td>الفجر</td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td></tr>
+    <tr><td>الظهر</td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td></tr>
+    <tr><td>العصر</td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td></tr>
+    <tr><td>المغرب</td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td></tr>
+    <tr><td>العشاء</td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td></tr>
+    <tr><td>أذكار المسلم</td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td><td class="check-cell"></td></tr>
+</table>
+
+
+<div id="heartPopup">
+    <div id="heartShape"></div>
+    <div class="heart-text" id="heartMessage">تهانينا! أتممت أعمالك اليوم💗</div>
+</div>
+
+<audio id="dingSound" src="ding.mp3"></audio>
+<audio id="heartSound" src="heart.mp3"></audio>
+
+<script>
+
+const cells = document.querySelectorAll('.check-cell');
+const heart = document.getElementById('heartPopup');
+const ding = document.getElementById('dingSound');
+const heartSound = document.getElementById('heartSound');
+const heartMessage = document.getElementById('heartMessage');
+
+const messages = [
+    "ما شاء الله! يومك مبارك 💗",
+    "أتممت كل أعمالك بإتقان 🌸",
+    "الحمد لله! استمر في طاعة الله ✨",
+    "رائع! يومك مليء بالخير 🌿",
+];
+
+const rows = Array.from(document.querySelectorAll('table tr')).slice(1);
+const dayCompleted = Array(7).fill(false);
+
+
+window.addEventListener('load', () => {
+    const totalCells = cells.length;
+    let storedCount = 0;
+
+    
+    cells.forEach(cell => {
+        const cellId = getCellId(cell);
+        if (localStorage.getItem(cellId) === 'checked') {
+            storedCount++;
+        }
+    });
+
+    
+    if (storedCount === totalCells && totalCells > 0) {
+        
+        cells.forEach(cell => {
+            const cellId = getCellId(cell);
+            localStorage.removeItem(cellId);
+            cell.classList.remove('checked');
+        });
+        console.log('All cells were previously checked — storage cleared and UI reset.');
+        return; 
+    }
+
+    
+    cells.forEach(cell => {
+        const cellId = getCellId(cell);
+        if (localStorage.getItem(cellId) === 'checked') {
+            cell.classList.add('checked');
+        } else {
+            cell.classList.remove('checked');
+        }
+    });
+});
+
+
+
+
+function getCellId(cell) {
+    const row = cell.parentElement.rowIndex - 1;
+    const col = cell.cellIndex - 1; 
+    return `cell-${row}-${col}`;
+}
+
+cells.forEach(cell => {
+    cell.addEventListener('click', () => {
+        cell.classList.toggle('checked');
+        checkWeekCompletion();
+
+        
+        const cellId = getCellId(cell);
+        if (cell.classList.contains('checked')) {
+            localStorage.setItem(cellId, 'checked');
+        } else {
+            localStorage.removeItem(cellId);
+        }
+
+        
+        for (let col = 1; col <= 7; col++) {
+            const dayCells = rows.map(r => r.children[col]);
+            const allChecked = dayCells.every(c => c.classList.contains('checked'));
+
+            if (allChecked && !dayCompleted[col-1]) {
+                dayCompleted[col-1] = true; 
+                
+                const msg = messages[Math.floor(Math.random() * messages.length)];
+                heartMessage.innerText = msg;
+
+                heart.style.transform = 'translate(-50%, -50%) scale(1)';
+                ding.currentTime = 0;
+                ding.play();
+                heartSound.currentTime = 0;
+                heartSound.play();
+
+                setTimeout(() => {
+                    heart.style.transform = 'translate(-50%, -50%) scale(0)';
+                }, 2000);
+            }
+        }
+    });
+});
+
+function checkWeekCompletion() {
+    const allCells = document.querySelectorAll('.check-cell');
+    const allChecked = Array.from(allCells).every(c => c.classList.contains('checked'));
+
+    if (allChecked) {
+        
+        heartMessage.innerText = "أحسنتِ! أنهيتِ أسبوعك كاملًا 💚✨";
+
+        
+        heart.style.transform = 'translate(-50%, -50%) scale(1)';
+        heartSound.currentTime = 0;
+        heartSound.play();
+
+        
+        allCells.forEach(c => {
+            const id = getCellId(c);
+            localStorage.removeItem(id);
+        });
+
+        
+        setTimeout(() => {
+            allCells.forEach(c => c.classList.remove('checked'));
+            heart.style.transform = 'translate(-50%, -50%) scale(0)';
+        }, 1200); 
+    }
+}
+
+
+
+</script>
+
+
+</body>
+</html>
+
+
