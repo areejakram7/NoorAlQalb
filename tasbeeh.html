@@ -1,0 +1,196 @@
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>مسبحة الأذكار</title>
+
+<style>
+    body {
+        background: #d0e0a0c2;
+        font-family: "Cairo", sans-serif;
+        text-align: center;
+        padding: 40px;
+        color: #2b3a2f;
+    }
+
+    h1 { margin-bottom: 20px;
+        font-size:25px ;
+    
+    }
+
+    .container {
+        background: #8eaf5ecc;
+        width: 350px;
+        margin: auto;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 0 15px #00000020;
+    }
+
+    
+    .clock {
+        width: 200px;
+        height: 200px;
+        margin: 20px auto;
+        border-radius: 50%;
+        background: #e3f4b2c2;;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 35px;
+        font-weight: bold;
+        color: #2b3a2f;
+        box-shadow: 0 0 25px #7ca76a inset;
+        animation: glow 4s infinite ease-in-out;
+        border-color: #3c5d2d;
+    }
+
+    
+    @keyframes glow {
+        0% { box-shadow: 0 0 15px #7ca76a inset; }
+        50% { box-shadow: 0 0 35px #98c88b inset; }
+        100% { box-shadow: 0 0 15px #7ca76a inset; }
+    }
+
+    
+    .hand {
+        width: 4px;
+        height: 75px;
+        background: #2b3a2f;
+        position: absolute;
+        bottom: 100px;
+        left: 50%;
+        transform-origin: bottom;
+        border-radius: 4px;
+        transform: rotate(0deg);
+        transition: 0.3s ease-out;
+    }
+
+    
+    .shake {
+        animation: shakeAnim 0.2s;
+    }
+
+    @keyframes shakeAnim {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-2px); }
+        50% { transform: translateX(2px); }
+        75% { transform: translateX(-2px); }
+        100% { transform: translateX(0); }
+    }
+
+    select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        font-size: 17px;
+        border: 1px solid #3c5d2d;
+        background:#e1f3acc2 ;
+        
+    }
+
+    button {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        border: none;
+        margin-top: 10px;
+        border-radius: 12px;
+        cursor: pointer;
+    }
+
+    .start { background: #51c256; color: #fff; }
+    .stop  { background: #d74639; color: #fff; }
+
+</style>
+</head>
+
+<body>
+
+<h1>🌿مع كل تسبيحة… يزداد القلب نورًا وطمأنينة🌿</h1>
+
+<div class="container">
+
+    <select id="zekr">
+        <option value="سبحان الله">سبحان الله</option>
+        <option value="الحمد لله">الحمد لله</option>
+        <option value="الله أكبر">الله أكبر</option>
+        <option value="لا إله إلا الله">لا إله إلا الله</option>
+        <option value="أستغفر الله">أستغفر الله</option>
+        <option value="اللهم صلِّ وسلم على سيدنا محمد">اللهم صلِّ وسلم على سيدنا محمد</option>
+    </select>
+
+    
+    <div class="clock" id="clock">
+        <div class="hand" id="hand"></div>
+        <span id="counter">0</span>
+    </div>
+
+    <button class="start" onclick="startListening()">ابدأ</button>
+    <button class="stop" onclick="stopListening()">إيقاف</button>
+</div>
+
+<script>
+    let count = 0;
+    let angle = 0;
+    let listening = false;
+
+    
+    let voiceInput = new Audio("myvoice.mp3");
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition = new SpeechRecognition();
+    recognition.lang = "ar";
+    recognition.continuous = true;
+
+    recognition.onresult = (event) => {
+        if (!listening) return;
+
+        let spoken = event.results[event.results.length - 1][0].transcript.trim();
+        let selected = document.getElementById("zekr").value;
+
+        if (spoken.includes(selected)) {
+            count++;
+
+            document.getElementById("counter").innerText = count;
+
+        
+            voiceInput.currentTime = 0;
+            voiceInput.play();
+
+            
+            angle += 12; 
+            document.getElementById("hand").style.transform =` rotate(${angle}deg)`;
+
+            
+            let clock = document.getElementById("clock");
+            clock.classList.add("shake");
+            setTimeout(() => clock.classList.remove("shake"), 200);
+        }
+    };
+
+    function startListening() {
+        count = 0;
+        angle = 0;
+
+        document.getElementById("counter").innerText = "0";
+        document.getElementById("hand").style.transform = "rotate(0deg)";
+
+        listening = true;
+        recognition.start();
+    }
+
+    function stopListening() {
+        listening = false;
+        recognition.stop();
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
